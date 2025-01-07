@@ -102,3 +102,4 @@ if __name__ == "__main__":
     with open("data/unemployment-mn.html", "r", encoding="utf-8") as file:
         html_content = file.read()
     scraper.parse_data(html_content)
+    scraper.driver.quit()

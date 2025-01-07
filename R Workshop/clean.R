@@ -5,23 +5,26 @@ election_data = read_csv("data/election-data-2020.csv") %>%
 
 write_csv(election_data, "data/election-data-mn.csv")
 
-unemployment = read_csv("data/unemployment-mn.csv") %>% filter(
+employment = read_csv("data/unemployment-mn.csv") %>% filter(
   Year != "P : Preliminary"
 )
 
-colnames(unemployment) <- c("Year", "Month", "LF", "E", "U", "UR", "County")
+colnames(employment) <- c("Year", "Month", "LF", "E", "U", "UR", "County")
 
-unemployment <- unemployment %>% mutate(
+employment <- employment %>% mutate(
   Year = as.numeric(Year),
   LF = as.numeric(LF),
+  E = as.numeric(E),
   U = as.numeric(U),
+  ER = E/LF*100,
   UR = as.numeric(UR)
 ) %>% filter(Year >= 2016) %>% na.omit()
 
-unemployment$State = "MN"
+employment$State = "MN"
 
-unemployment$County <- unemployment$County %>% sapply(function(c){
-  c %>% str_split(" County, MN") %>% .[[1]] %>% .[1]
+employment$County <- employment$County %>% sapply(function(c){
+  county <- c %>% str_split(" County, MN") %>% .[[1]] %>% .[1]
+  ifelse(county == "Lac qui Parle", "Lac Qui Parle", county)
 })
 
-write_csv(unemployment, "data/unemployment-mn.csv")
+write_csv(employment, "data/employment-mn.csv")

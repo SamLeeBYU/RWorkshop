@@ -31,7 +31,7 @@ class Scraper:
 
         data_table = section.find_element(By.TAG_NAME, "table")
         rows = data_table.text.split("\n")[5:]
-        chunk_size = 28
+        chunk_size = 14
         partitioned = [rows[i:i + chunk_size] for i in range(0, len(rows), chunk_size)]
         data = [[subarray[0], subarray[2], subarray[10]] for subarray in partitioned if len(subarray) >= 11]
 
